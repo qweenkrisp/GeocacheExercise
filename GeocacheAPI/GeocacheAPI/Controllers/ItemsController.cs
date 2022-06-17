@@ -122,8 +122,18 @@ namespace GeocacheAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Item>> PostItem([FromQuery] string name, int? location, DateTime? active, DateTime? inactive)
         {
+            List<Item> allItems = await _context.Item.ToListAsync();
             //validate name
             String newname = Regex.Replace(name, @"[^0-9a-zA-Z ]+", "");
+            //make sure it's not already in the db
+            foreach(Item it in allItems)
+            {
+                if (it.Name.Equals(newname))
+                {
+                    return BadRequest("Not a unique name!");
+                }
+            }
+            
 
             //validate gclocation is real
             //if assigned a location at creation, make sure there's not too many in that location
@@ -135,11 +145,11 @@ namespace GeocacheAPI.Controllers
                 {
                     return NotFound();
                 }
-                List<Item> allItems = await _context.Item.ToListAsync();
+                
                 int count = 0;
-                foreach (Item it in allItems)
+                foreach (Item it2 in allItems)
                 {
-                    if (it.Geocache == location) count++;
+                    if (it2.Geocache == location) count++;
                 }
                 if (count >= 3) return BadRequest();
                 if(active == null) active = DateTime.Today;
