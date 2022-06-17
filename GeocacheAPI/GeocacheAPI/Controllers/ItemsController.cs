@@ -29,30 +29,16 @@ namespace GeocacheAPI.Controllers
             return await _context.Item.ToListAsync();
         }
 
-        // GET: api/Items/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Item>> GetItem(int id)
-        //{
-        //    var item = await _context.Item.FindAsync(id);
-
-        //    if (item == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return item;
-        //}
-
 
         //items at a certain geocache
         [HttpGet("{geocache}")]
-        public async Task<ActionResult<Item>> GetItem(int geocache)
+        public async Task<ActionResult<Item>> GetItemInCache(int geocache)
         {
             var item = await _context.Item.FindAsync(geocache);
 
             if (item == null)
             {
-                return NotFound();
+                return NotFound("Geocache does not exist");
             }
 
             return item;
@@ -62,22 +48,18 @@ namespace GeocacheAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutItem(int id, [FromQuery] int location)
+        public async Task<IActionResult> PutItem(int id, [FromQuery] int location, DateTime? inactivate)
         {
             //find item in database
             Item item = await _context.Item.FindAsync(id);
-            if (item == null) return NotFound();
-            //if (id != item.Id)
-            //{
-            //    return BadRequest();
-            //}
+            if (item == null) return NotFound("Item does not exist");
 
-            //validate location (exist, not more than 3)
+            //validate location (exists, not more than 3)
             var geocache = await _context.Geocache.FindAsync(location);
 
             if (geocache == null)
             {
-                return NotFound();
+                return NotFound("Geocache does not exist");
             }
             List<Item> allItems = await _context.Item.ToListAsync();
             int count = 0;
@@ -85,15 +67,26 @@ namespace GeocacheAPI.Controllers
             {
                 if (it.Geocache == location) count++;
             }
-            if (count >= 3) return BadRequest();
+            if (count >= 3) return BadRequest("Too many items in this geocache");
 
+            //validate that it is active (either null or date before today
+            if(item.Active > DateTime.Today)
+            {
+                return BadRequest("not active yet!");
+            }
 
             //validate that it is not inactivated
             if(item.Inactive != null && item.Inactive < DateTime.Today)
             {
-                return BadRequest();
+                return BadRequest("Item is inactive");
             }
 
+            //validate inactivate if entered
+            if(inactivate != null && inactivate < DateTime.Today)
+            {
+                return BadRequest("Date entered has already happened");
+            }
+     
 
             _context.Entry(item).State = EntityState.Modified;
 
@@ -103,6 +96,8 @@ namespace GeocacheAPI.Controllers
                 item.Geocache = location;
                 //activate if it had not been
                 if (item.Active == null) item.Active = DateTime.Today;
+                //set inactive date if it hadn't been
+                if(item.Inactive == null) item.Inactive = inactivate;
 
                 await _context.SaveChangesAsync();
             }
@@ -147,7 +142,7 @@ namespace GeocacheAPI.Controllers
                     if (it.Geocache == location) count++;
                 }
                 if (count >= 3) return BadRequest();
-                active = DateTime.Today;
+                if(active == null) active = DateTime.Today;
             }
             
 

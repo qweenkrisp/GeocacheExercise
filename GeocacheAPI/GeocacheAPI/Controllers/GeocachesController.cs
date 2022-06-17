@@ -37,7 +37,7 @@ namespace GeocacheAPI.Controllers
 
             if (geocache == null)
             {
-                return NotFound();
+                return NotFound("Geocache does not exist");
             }
 
             return geocache;
@@ -81,6 +81,7 @@ namespace GeocacheAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Geocache>> PostGeocache([FromQuery] string name, string location)
         {
+            //need to add format validation for coordinates
 
             String newname = Regex.Replace(name, @"[^0-9a-zA-Z ]+", "");
             Geocache geocache = new Geocache
