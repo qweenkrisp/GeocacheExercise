@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GeocacheAPI.DAL;
 using GeocacheAPI.Models;
+using System.Text.RegularExpressions;
 
 namespace GeocacheAPI.Controllers
 {
@@ -78,8 +79,20 @@ namespace GeocacheAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Item>> PostItem(Item item)
+        public async Task<ActionResult<Item>> PostItem([FromQuery] string name, int? location, DateTime? active, DateTime? inactive)
         {
+            //validate name
+            String newname = Regex.Replace(name, @"[^0-9a-zA-Z ]+", "");
+
+            Item item = new Item()
+            {
+                Name = newname,
+                Geocache = location,
+                Active = active,
+                Inactive = inactive
+
+            };
+
             _context.Item.Add(item);
             await _context.SaveChangesAsync();
 

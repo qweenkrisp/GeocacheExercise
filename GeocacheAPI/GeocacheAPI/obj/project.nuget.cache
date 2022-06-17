@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iy6atDDtwpsepvI1CiBqrm/gVePNELriXB1+MR1/JQywJS77x5fN59uL1MBkQXRHHajCXIPSu77I+ilRwAK1ZQ==",
+  "dgSpecHash": "NFMS4iAfBsHxDxDG7fZrODg6CmeG1xqawJbBI9MYn3cnI64lbqsgTgBI5+/S1sSgAYz+oDpP1ptwYRKDvTvYLw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheAPI\\GeocacheAPI\\GeocacheAPI.csproj",
+  "projectFilePath": "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheExercise\\GeocacheAPI\\GeocacheAPI\\GeocacheAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kpost\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\kpost\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",

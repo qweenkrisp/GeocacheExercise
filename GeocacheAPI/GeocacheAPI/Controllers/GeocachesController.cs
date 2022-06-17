@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GeocacheAPI.DAL;
 using GeocacheAPI.Models;
+using System.Text.RegularExpressions;
 
 namespace GeocacheAPI.Controllers
 {
@@ -46,7 +47,7 @@ namespace GeocacheAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGeocache(int id, Geocache geocache)
+        public async Task<IActionResult> PutGeocache(int id, [FromBody] Geocache geocache)
         {
             if (id != geocache.Id)
             {
@@ -78,8 +79,16 @@ namespace GeocacheAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Geocache>> PostGeocache(Geocache geocache)
+        public async Task<ActionResult<Geocache>> PostGeocache([FromQuery] string name, string location)
         {
+
+            String newname = Regex.Replace(name, @"[^0-9a-zA-Z ]+", "");
+            Geocache geocache = new Geocache
+            {
+                Name = newname,
+                Coordinates = location
+            };
+
             _context.Geocache.Add(geocache);
             await _context.SaveChangesAsync();
 

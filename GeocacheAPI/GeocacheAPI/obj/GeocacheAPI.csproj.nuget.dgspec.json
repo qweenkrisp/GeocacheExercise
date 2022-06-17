@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheAPI\\GeocacheAPI\\GeocacheAPI.csproj": {}
+    "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheExercise\\GeocacheAPI\\GeocacheAPI\\GeocacheAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheAPI\\GeocacheAPI\\GeocacheAPI.csproj": {
+    "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheExercise\\GeocacheAPI\\GeocacheAPI\\GeocacheAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheAPI\\GeocacheAPI\\GeocacheAPI.csproj",
+        "projectUniqueName": "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheExercise\\GeocacheAPI\\GeocacheAPI\\GeocacheAPI.csproj",
         "projectName": "GeocacheAPI",
-        "projectPath": "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheAPI\\GeocacheAPI\\GeocacheAPI.csproj",
+        "projectPath": "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheExercise\\GeocacheAPI\\GeocacheAPI\\GeocacheAPI.csproj",
         "packagesPath": "C:\\Users\\kpost\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheAPI\\GeocacheAPI\\obj\\",
+        "outputPath": "C:\\Users\\kpost\\Desktop\\geocache\\GeocacheExercise\\GeocacheAPI\\GeocacheAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
