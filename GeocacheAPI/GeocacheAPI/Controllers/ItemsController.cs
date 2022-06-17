@@ -62,17 +62,48 @@ namespace GeocacheAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutItem(int id, [FromBody] Item item)
+        public async Task<IActionResult> PutItem(int id, [FromQuery] int location)
         {
-            if (id != item.Id)
+            //find item in database
+            Item item = await _context.Item.FindAsync(id);
+            if (item == null) return NotFound();
+            //if (id != item.Id)
+            //{
+            //    return BadRequest();
+            //}
+
+            //validate location (exist, not more than 3)
+            var geocache = await _context.Geocache.FindAsync(location);
+
+            if (geocache == null)
+            {
+                return NotFound();
+            }
+            List<Item> allItems = await _context.Item.ToListAsync();
+            int count = 0;
+            foreach (Item it in allItems)
+            {
+                if (it.Geocache == location) count++;
+            }
+            if (count >= 3) return BadRequest();
+
+
+            //validate that it is not inactivated
+            if(item.Inactive != null && item.Inactive < DateTime.Today)
             {
                 return BadRequest();
             }
+
 
             _context.Entry(item).State = EntityState.Modified;
 
             try
             {
+                //reassign
+                item.Geocache = location;
+                //activate if it had not been
+                if (item.Active == null) item.Active = DateTime.Today;
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
