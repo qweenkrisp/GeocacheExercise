@@ -30,10 +30,25 @@ namespace GeocacheAPI.Controllers
         }
 
         // GET: api/Items/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> GetItem(int id)
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Item>> GetItem(int id)
+        //{
+        //    var item = await _context.Item.FindAsync(id);
+
+        //    if (item == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return item;
+        //}
+
+
+        //items at a certain geocache
+        [HttpGet("{geocache}")]
+        public async Task<ActionResult<Item>> GetItem(int geocache)
         {
-            var item = await _context.Item.FindAsync(id);
+            var item = await _context.Item.FindAsync(geocache);
 
             if (item == null)
             {
@@ -47,7 +62,7 @@ namespace GeocacheAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutItem(int id, Item item)
+        public async Task<IActionResult> PutItem(int id, [FromBody] Item item)
         {
             if (id != item.Id)
             {
@@ -83,6 +98,27 @@ namespace GeocacheAPI.Controllers
         {
             //validate name
             String newname = Regex.Replace(name, @"[^0-9a-zA-Z ]+", "");
+
+            //validate gclocation is real
+            //if assigned a location at creation, make sure there's not too many in that location
+            if(location != null)
+            {
+                var geocache = await _context.Geocache.FindAsync(location);
+
+                if (geocache == null)
+                {
+                    return NotFound();
+                }
+                List<Item> allItems = await _context.Item.ToListAsync();
+                int count = 0;
+                foreach (Item it in allItems)
+                {
+                    if (it.Geocache == location) count++;
+                }
+                if (count >= 3) return BadRequest();
+                active = DateTime.Today;
+            }
+            
 
             Item item = new Item()
             {
