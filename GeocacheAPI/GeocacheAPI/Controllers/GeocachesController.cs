@@ -79,10 +79,27 @@ namespace GeocacheAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Geocache>> PostGeocache([FromQuery] string name, string location)
+        public async Task<ActionResult<Geocache>> PostGeocache([FromQuery] string name, string latitude, string latDegree, string longitude, string longDegree)
         {
-            //need to add format validation for coordinates
+            float lat;
+            float lon;
 
+            //format validation for coordinates
+            if (!latitude.Equals("N") && !latitude.Equals("S"))
+            {
+                return BadRequest("Invalid format for Latitude ");
+            }else if (!longitude.Equals("W") && !longitude.Equals("E"))
+            {
+                return BadRequest("Invalid format for Longitude ");
+            }else if(!Single.TryParse(latDegree, out lat))
+            {
+                return BadRequest("Invalid format for Latitude Degrees");
+            } else if(!Single.TryParse(longDegree, out lon))
+            {
+                return BadRequest("Invalid format for Longitude Degrees");
+            }
+
+            String location = latitude + " " + latDegree + " " + longitude + " " + longDegree;
             String newname = Regex.Replace(name, @"[^0-9a-zA-Z ]+", "");
             Geocache geocache = new Geocache
             {
