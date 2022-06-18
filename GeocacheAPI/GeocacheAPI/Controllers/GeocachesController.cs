@@ -100,7 +100,21 @@ namespace GeocacheAPI.Controllers
             }
 
             String location = latitude + " " + latDegree + " " + longitude + " " + longDegree;
+
+
             String newname = Regex.Replace(name, @"[^0-9a-zA-Z ]+", "");
+
+            //unique name
+            List<Geocache> allGC = await _context.Geocache.ToListAsync();
+            foreach (Geocache gc in allGC)
+            {
+                if(newname == gc.Name)
+                {
+                    return BadRequest("Not a unique name!");
+                }
+            }
+
+
             Geocache geocache = new Geocache
             {
                 Name = newname,
